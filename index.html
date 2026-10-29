@@ -4,368 +4,314 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0b1020">
+<meta name="theme-color" content="#0e1428">
 <title>Calcul d'arrêt matière</title>
-
 <style>
 :root {
   color-scheme: dark;
-  --panel: #151d31;
-  --line: #2b3853;
-  --text: #f4f7fb;
-  --muted: #aab7cc;
-  --accent: #7dd3fc;
+  --bg: #0e1428;
+  --card: #151e35;
+  --input: #0b1225;
+  --border: #303c5b;
+  --white: #f4f6fc;
+  --muted: #aab5cc;
+  --blue: #204e9b;
+  --lightblue: #82d3ff;
+  --red: #e51e43;
 }
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  padding: 18px 14px 36px;
-  background: linear-gradient(160deg,#111a2e,#090d18 70%);
-  color: var(--text);
-  font: 16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  padding: 24px 18px 38px;
+  background: var(--bg);
+  color: var(--white);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
-main { max-width: 650px; margin: auto; }
-header { text-align: center; margin: 8px 0 22px; }
-.brand { display: block; width: min(100%,300px); margin: 0 auto 12px; }
-.eyebrow {
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: .12em;
-  font-size: .75rem;
+main { max-width: 660px; margin: auto; }
+header { text-align: center; margin: 16px 0 40px; }
+.brand { width: min(100%, 350px); margin: 0 auto 24px; }
+.brand svg { display: block; width: 100%; height: auto; }
+.tagline {
+  color: var(--lightblue);
+  letter-spacing: 3px;
+  font-size: 13px;
   font-weight: 800;
+  margin: 0 0 15px;
 }
-h1 { font-size: clamp(1.7rem,5vw,2.2rem); margin: 6px 0 8px; line-height: 1.1; }
-h2 { font-size: 1.08rem; margin: 0 0 14px; }
-.intro,.hint,.note { color: var(--muted); }
-.intro { margin: 0; }
-.panel {
-  background: rgba(21,29,49,.96);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 17px;
-  margin: 14px 0;
-  box-shadow: 0 10px 28px #0002;
+h1 { font-size: clamp(27px, 6vw, 38px); margin: 0 0 16px; }
+.intro {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+  margin: 0;
 }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-label { display: block; font-size: .9rem; font-weight: 650; margin-bottom: 7px; }
-.hint { display: block; font-size: .78rem; margin-top: 4px; }
-input,textarea {
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 23px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+h2 { font-size: 23px; margin: 0 0 27px; }
+.field { margin-bottom: 25px; }
+.field:last-child { margin-bottom: 0; }
+label {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+input, textarea {
   width: 100%;
-  min-width: 0;
-  background: #0b1222;
-  color: var(--text);
-  border: 1px solid #3b4965;
-  border-radius: 10px;
-  padding: 12px;
+  background: var(--input);
+  color: var(--white);
+  border: 1.5px solid #3b4869;
+  border-radius: 16px;
+  padding: 17px;
   font: inherit;
-  font-size: 1rem;
+  font-size: 20px;
   outline: none;
 }
-input:focus,textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px #7dd3fc22;
+input:focus, textarea:focus { border-color: var(--lightblue); }
+small {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 9px;
 }
-.results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .result {
-  background: #0b1222;
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  padding: 13px;
-  min-width: 0;
+  background: var(--input);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 17px;
+  margin-top: 13px;
 }
-.result .name { color: var(--muted); font-size: .82rem; }
-.result .value {
-  font-size: clamp(1.2rem,4.5vw,1.65rem);
+.result-label { color: var(--muted); font-size: 14px; line-height: 1.4; }
+.result-value {
+  font-size: 23px;
   font-weight: 800;
-  margin-top: 5px;
+  margin-top: 8px;
   overflow-wrap: anywhere;
 }
-.primary {
-  border-color: #397b9a;
-  background: linear-gradient(145deg,#10283a,#0b1222);
-  grid-column: 1 / -1;
-}
-.primary .value { color: var(--accent); font-size: clamp(1.55rem,6vw,2.1rem); }
-.status {
-  border-radius: 12px;
-  padding: 13px 14px;
-  margin-top: 12px;
-  background: #182237;
-  border: 1px solid var(--line);
-  color: var(--text);
-}
-.status.warn { background: #332713; border-color: #73551e; color: #ffedc2; }
-.status strong { display: block; margin-bottom: 3px; }
-textarea { display: block; min-height: 120px; resize: vertical; }
-.actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
-button {
-  border: 1px solid #3b4965;
+.highlight { border-color: #3b6db4; }
+.highlight .result-value { color: var(--lightblue); }
+.message {
+  background: #1d2b49;
+  border-left: 4px solid var(--lightblue);
+  padding: 15px;
   border-radius: 10px;
-  padding: 10px 14px;
-  background: #202b42;
-  color: var(--text);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.65;
+  margin-top: 16px;
 }
-#clear-notes { background: #35212a; border-color: #744050; }
-.note { font-size: .83rem; margin: 0; }
-@media(max-width:430px) {
-  .grid { grid-template-columns: 1fr; }
-  .panel { padding: 15px; }
+.notes-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.notes-head h2 { margin: 0; }
+button {
+  background: #202d4a;
+  color: var(--white);
+  border: 1px solid #405477;
+  border-radius: 10px;
+  padding: 10px 13px;
+  font-size: 13px;
+  font-weight: 600;
+}
+textarea { min-height: 135px; resize: vertical; font-size: 16px; }
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 26px;
+}
+@media (max-width: 420px) {
+  body { padding: 20px 14px 35px; }
+  .card { padding: 20px 17px; }
+  h2 { font-size: 21px; }
+  .brand { width: 92%; }
 }
 </style>
 </head>
-
 <body>
 <main>
-
 <header>
-<svg class="brand" viewBox="0 0 340 180" role="img" aria-label="Colly et Martin">
-  <g fill="none" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M35 82 L92 25 Q111 8 132 16 L83 67 Q57 61 43 82 Q28 105 46 124 Q67 144 89 123 L117 72 Q130 49 146 68 L146 113 Q146 138 164 138 Q182 138 188 113 L201 67 Q208 45 225 63 Q232 70 232 83 L232 118 L263 118 L294 86" stroke="#e6002d" stroke-width="25"/>
-    <path d="M35 82 L92 25 Q111 8 132 16 L83 67 Q57 61 43 82 Q28 105 46 124 Q67 144 89 123 L117 72 Q130 49 146 68 L146 113 Q146 138 164 138 Q182 138 188 113 L201 67 Q208 45 225 63 Q232 70 232 83 L232 118 L263 118 L294 86" stroke="#fff" stroke-width="17"/>
-    <path d="M35 82 L92 25 Q111 8 132 16 L83 67 Q57 61 43 82 Q28 105 46 124 Q67 144 89 123 L117 72 Q130 49 146 68 L146 113 Q146 138 164 138 Q182 138 188 113 L201 67 Q208 45 225 63 Q232 70 232 83 L232 118 L263 118 L294 86" stroke="#06378c" stroke-width="9"/>
-  </g>
-  <text x="170" y="169" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" font-weight="700" fill="#ffffff">Colly<tspan font-weight="400">&amp;</tspan>Martin</text>
-</svg>
-
-<div class="eyebrow">Outil atelier · extrusion</div>
-<h1>Calcul d'arrêt matière</h1>
-<p class="intro">Calcule quand couper l'alimentation d'une matière avant la fin de l'OF.</p>
+  <div class="brand">
+    <svg viewBox="0 0 360 205" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Colly et Martin">
+      <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M45 113 C30 101 38 82 55 66 L112 16 C133 -2 165 5 157 24 L91 91 C81 103 91 108 103 96 L139 61 C151 49 165 56 163 73 L157 133 C155 154 174 154 181 132 L202 78 C211 55 231 60 233 84 L237 133 C239 151 251 153 267 137 L305 99"
+          stroke="#e51e43" stroke-width="19"/>
+        <path d="M45 113 C30 101 38 82 55 66 L112 16 C133 -2 165 5 157 24 L91 91 C81 103 91 108 103 96 L139 61 C151 49 165 56 163 73 L157 133 C155 154 174 154 181 132 L202 78 C211 55 231 60 233 84 L237 133 C239 151 251 153 267 137 L305 99"
+          stroke="#ffffff" stroke-width="12"/>
+        <path d="M45 113 C30 101 38 82 55 66 L112 16 C133 -2 165 5 157 24 L91 91 C81 103 91 108 103 96 L139 61 C151 49 165 56 163 73 L157 133 C155 154 174 154 181 132 L202 78 C211 55 231 60 233 84 L237 133 C239 151 251 153 267 137 L305 99"
+          stroke="#19488f" stroke-width="6"/>
+      </g>
+      <text x="180" y="184" text-anchor="middle" font-size="31" font-weight="800" fill="#204e9b" font-family="Arial, sans-serif">Colly&amp;Martin</text>
+    </svg>
+  </div>
+  <p class="tagline">OUTIL ATELIER · EXTRUSION</p>
+  <h1>Calcul d'arrêt matière</h1>
+  <p class="intro">Calcule quand couper l'alimentation d'une matière avant la fin de l'OF.</p>
 </header>
 
-<section class="panel">
-<h2>1. Données de production</h2>
-<div class="grid">
-
-<div>
-<label for="remaining">Temps restant sur l'OF (minutes)</label>
-<input id="remaining" type="number" min="0" step="1" placeholder="Ex. : 350" inputmode="numeric">
-<span class="hint">Saisis le nombre total de minutes.</span>
-</div>
-
-<div>
-<label for="percent">Pourcentage de cette matière (%)</label>
-<input id="percent" type="number" min="0.01" max="100" step="any" placeholder="Ex. : 5" inputmode="decimal">
-</div>
-
-<div>
-<label for="rate">Consommation totale machine (kg/h)</label>
-<input id="rate" type="number" min="0.01" step="any" placeholder="Ex. : 90" inputmode="decimal">
-</div>
-
-<div>
-<label for="stock">Quantité présente dans ce doseur (kg)</label>
-<input id="stock" type="number" min="0" step="any" placeholder="Ex. : 40" inputmode="decimal">
-<span class="hint">Adapte cette valeur à chaque doseur.</span>
-</div>
-
-</div>
+<section class="card">
+  <h2>1. Données de production</h2>
+  <div class="field">
+    <label for="remaining">Temps restant sur l'OF (minutes)</label>
+    <input id="remaining" type="number" min="0" step="any" inputmode="decimal">
+  </div>
+  <div class="field">
+    <label for="percent">Pourcentage de cette matière (%)</label>
+    <input id="percent" type="number" min="0" max="100" step="any" inputmode="decimal">
+    <small>Pourcentage indiqué dans l'OF.</small>
+  </div>
+  <div class="field">
+    <label for="rate">Consommation totale machine (kg/h)</label>
+    <input id="rate" type="number" min="0" step="any" inputmode="decimal">
+  </div>
+  <div class="field">
+    <label for="stock">Quantité de matière dans le doseur (kg)</label>
+    <input id="stock" type="number" min="0" step="any" inputmode="decimal">
+    <small>Indique uniquement le stock de cette matière dans son doseur.</small>
+  </div>
 </section>
 
-<section class="panel">
-<h2>2. Résultats automatiques</h2>
-
-<div class="results" aria-live="polite">
-  <div class="result primary">
-    <div class="name">Quand arrêter l'alimentation</div>
-    <div class="value" id="stop">—</div>
-    <div class="name" id="stopSub">En attente des données</div>
+<section class="card">
+  <h2>2. Résultats du calcul</h2>
+  <div class="result highlight">
+    <div class="result-label">Quand couper l'alimentation ?</div>
+    <div class="result-value" id="stop">—</div>
   </div>
-
   <div class="result">
-    <div class="name">Consommation de cette matière</div>
-    <div class="value" id="consumption">—</div>
-    <div class="name">kg par heure</div>
+    <div class="result-label">Consommation de cette matière</div>
+    <div class="result-value" id="consumption">—</div>
   </div>
-
   <div class="result">
-    <div class="name">Autonomie du doseur</div>
-    <div class="value" id="autonomy">—</div>
-    <div class="name">Durée théorique</div>
+    <div class="result-label">Autonomie dans le doseur</div>
+    <div class="result-value" id="autonomy">—</div>
   </div>
-
   <div class="result">
-    <div class="name">Matière nécessaire jusqu'à la fin</div>
-    <div class="value" id="needed">—</div>
-    <div class="name">kg estimés</div>
+    <div class="result-label">Matière nécessaire pour finir l'OF</div>
+    <div class="result-value" id="needed">—</div>
   </div>
-
   <div class="result">
-    <div class="name">Stock restant si arrêt immédiat</div>
-    <div class="value" id="leftover">—</div>
-    <div class="name">kg estimés</div>
+    <div class="result-label">Matière restante à la fin si tu arrêtes maintenant</div>
+    <div class="result-value" id="leftover">—</div>
   </div>
-</div>
-
-<div id="status" class="status" role="status">
-<strong>En attente</strong>
-<span>Renseigne les quatre champs pour afficher les résultats.</span>
-</div>
+  <div class="message" id="message">Renseigne les quatre champs pour obtenir le calcul.</div>
 </section>
 
-<section class="panel">
-<h2>Notes d'atelier</h2>
-<label for="notes">Tes notes</label>
-<textarea id="notes" rows="5" placeholder="Consigne, particularité de l'OF, matière à arrêter..."></textarea>
-<div class="actions">
-<button type="button" id="clear-notes">Tout supprimer</button>
-<span id="notes-state" class="note">Sauvegarde locale si disponible.</span>
-</div>
+<section class="card">
+  <div class="notes-head">
+    <h2>Notes de production</h2>
+    <button type="button" id="clearNotes">Tout supprimer</button>
+  </div>
+  <textarea id="notes" placeholder="Écris tes notes ici..."></textarea>
+  <small>Les notes sont enregistrées automatiquement sur cet appareil.</small>
 </section>
 
+<footer>Résultats estimatifs · Vérifie les conditions réelles de production.</footer>
 </main>
 
 <script>
-(() => {
-  const ids = ['remaining','percent','rate','stock'];
-  const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+const ids = ["remaining", "percent", "rate", "stock"];
 
-  const out = {
-    stop: document.getElementById('stop'),
-    stopSub: document.getElementById('stopSub'),
-    consumption: document.getElementById('consumption'),
-    autonomy: document.getElementById('autonomy'),
-    needed: document.getElementById('needed'),
-    leftover: document.getElementById('leftover'),
-    status: document.getElementById('status')
-  };
+function numberFrom(id) {
+  const value = document.getElementById(id).value.trim();
+  if (value === "") return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
 
-  const fmt = n => n.toLocaleString('fr-FR', { maximumFractionDigits: 2 });
+function fmt(value) {
+  return value.toLocaleString("fr-FR", { maximumFractionDigits: 2 });
+}
 
-  function duration(totalMinutes) {
-    const totalSeconds = Math.max(0, Math.round(totalMinutes * 60));
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
+function duration(minutes) {
+  const seconds = Math.max(0, Math.round(minutes * 60));
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  return h + " h " + String(m).padStart(2, "0") +
+    " min " + String(s).padStart(2, "0") + " s";
+}
 
-    if (h && m) return `${h} h ${m} min`;
-    if (h) return `${h} h`;
-    if (m && s) return `${m} min ${s} s`;
-    if (m) return `${m} min`;
-    return `${s} s`;
+function put(id, text) {
+  document.getElementById(id).textContent = text;
+}
+
+function reset(message) {
+  ["stop", "consumption", "autonomy", "needed", "leftover"].forEach(id => put(id, "—"));
+  put("message", message);
+}
+
+function calculate() {
+  const remaining = numberFrom("remaining");
+  const percent = numberFrom("percent");
+  const rate = numberFrom("rate");
+  const stock = numberFrom("stock");
+
+  if ([remaining, percent, rate, stock].some(v => v === null)) {
+    reset("Renseigne les quatre champs pour obtenir le calcul.");
+    return;
   }
 
-  function resetResults(message = 'Renseigne les quatre champs pour afficher les résultats.') {
-    out.stop.textContent = '—';
-    out.stopSub.textContent = 'En attente des données';
-    out.consumption.textContent = '—';
-    out.autonomy.textContent = '—';
-    out.needed.textContent = '—';
-    out.leftover.textContent = '—';
-    out.status.className = 'status';
-    out.status.replaceChildren();
-
-    const strong = document.createElement('strong');
-    strong.textContent = 'En attente';
-    const span = document.createElement('span');
-    span.textContent = message;
-    out.status.append(strong, span);
+  if (remaining < 0 || percent <= 0 || percent > 100 || rate <= 0 || stock < 0) {
+    reset("Vérifie les valeurs : temps et stock positifs ou nuls, pourcentage supérieur à 0 et inférieur ou égal à 100, débit supérieur à 0.");
+    return;
   }
 
-  function showStatus(type, title, message) {
-    out.status.className = 'status' + (type === 'warn' ? ' warn' : '');
-    out.status.replaceChildren();
+  const materialRate = rate * percent / 100;
+  const autonomy = stock / materialRate * 60;
+  const needed = materialRate * remaining / 60;
+  const leftover = Math.max(0, stock - needed);
+  const delay = remaining - autonomy;
 
-    const strong = document.createElement('strong');
-    strong.textContent = title;
-    const span = document.createElement('span');
-    span.textContent = message;
-    out.status.append(strong, span);
+  put("consumption", fmt(materialRate) + " kg/h");
+  put("autonomy", duration(autonomy));
+  put("needed", fmt(needed) + " kg");
+  put("leftover", fmt(leftover) + " kg");
+
+  if (remaining === 0) {
+    put("stop", "OF terminé");
+    put("message", "Le temps restant est nul. Vérifie l'état de la production.");
+  } else if (stock === 0) {
+    put("stop", "Doseur vide");
+    put("message", "Il n'y a plus de matière dans le doseur.");
+  } else if (Math.abs(delay) < 0.01) {
+    put("stop", "Maintenant");
+    put("message", "L'autonomie correspond pratiquement au temps restant de l'OF. Vérifie les conditions réelles de la ligne.");
+  } else if (delay > 0) {
+    put("stop", "Dans " + duration(delay));
+    put("message", "Continue l'alimentation pendant ce délai estimé, puis coupe-la pour faire correspondre l'autonomie au temps restant de l'OF.");
+  } else {
+    put("stop", "Maintenant");
+    put("message", "La réserve dépasse le besoin pour finir l'OF. Si tu arrêtes maintenant, environ " + fmt(leftover) + " kg devraient rester à la fin. Tiens compte de la matière déjà présente dans le circuit.");
   }
+}
 
-  function update() {
-    const values = {};
-    for (const id of ids) {
-      const raw = el[id].value.trim();
-      if (raw === '') {
-        resetResults();
-        return;
-      }
-      values[id] = Number(raw);
-    }
+ids.forEach(id => document.getElementById(id).addEventListener("input", calculate));
 
-    const remainingMin = values.remaining;
-    const p = values.percent;
-    const rate = values.rate;
-    const stock = values.stock;
-
-    if (
-      !Object.values(values).every(Number.isFinite) ||
-      remainingMin < 0 || p <= 0 || p > 100 ||
-      rate <= 0 || stock < 0
-    ) {
-      resetResults('Vérifie les valeurs : temps positif ou nul, pourcentage supérieur à 0 et inférieur ou égal à 100, débit positif et stock non négatif.');
-      out.status.className = 'status warn';
-      return;
-    }
-
-    const remainingHours = remainingMin / 60;
-    const matterRate = rate * p / 100;
-    const autonomyMin = stock / matterRate * 60;
-    const neededKg = matterRate * remainingHours;
-    const leftoverKg = Math.max(0, stock - neededKg);
-    const delayMin = remainingMin - autonomyMin;
-
-    out.consumption.textContent = fmt(matterRate) + ' kg/h';
-    out.autonomy.textContent = duration(autonomyMin);
-    out.needed.textContent = fmt(neededKg) + ' kg';
-    out.leftover.textContent = fmt(leftoverKg) + ' kg';
-
-    if (stock === 0) {
-      out.stop.textContent = 'Doseur vide';
-      out.stopSub.textContent = 'Vérifie le stock';
-      showStatus('warn', 'Aucun stock', 'La quantité saisie dans le doseur est nulle.');
-    } else if (remainingMin === 0) {
-      out.stop.textContent = 'Fin de l’OF';
-      out.stopSub.textContent = 'Temps restant nul';
-      showStatus('warn', 'Commande terminée', 'Le temps restant indiqué est de zéro minute.');
-    } else if (delayMin > 0.5) {
-      out.stop.textContent = 'Dans ' + duration(delayMin);
-      out.stopSub.textContent = 'Autonomie théorique : ' + duration(autonomyMin);
-      showStatus('ok', 'Arrêt à programmer', 'Selon les valeurs saisies, coupe cette matière dans environ ' + duration(delayMin) + '.');
-    } else if (delayMin >= -0.5) {
-      out.stop.textContent = 'Maintenant';
-      out.stopSub.textContent = 'Le stock correspond au temps restant';
-      showStatus('ok', 'Le timing correspond', 'Le stock devrait être consommé approximativement à la fin de l’OF.');
-    } else {
-      out.stop.textContent = 'Maintenant';
-      out.stopSub.textContent = 'Réserve insuffisante';
-      showStatus('warn', 'Attention : stock insuffisant', 'Il faudrait ' + fmt(neededKg) + ' kg pour le temps restant, mais le doseur contient ' + fmt(stock) + ' kg. Il manquerait environ ' + fmt(Math.max(0, neededKg - stock)) + ' kg.');
-    }
-  }
-
-  ids.forEach(id => el[id].addEventListener('input', update));
-  resetResults();
-
-  const notes = document.getElementById('notes');
-  const notesState = document.getElementById('notes-state');
-  const notesKey = 'calcul-arret-matiere-notes-v1';
-
-  try {
-    notes.value = localStorage.getItem(notesKey) || '';
-  } catch (e) {
-    notesState.textContent = 'Sauvegarde indisponible dans ce navigateur.';
-  }
-
-  notes.addEventListener('input', () => {
-    try {
-      localStorage.setItem(notesKey, notes.value);
-      notesState.textContent = 'Notes enregistrées sur cet appareil.';
-    } catch (e) {
-      notesState.textContent = 'Impossible de sauvegarder automatiquement.';
-    }
+const notes = document.getElementById("notes");
+try {
+  notes.value = localStorage.getItem("calculArretMatiereNotes") || "";
+  notes.addEventListener("input", () => {
+    try { localStorage.setItem("calculArretMatiereNotes", notes.value); } catch (e) {}
   });
+} catch (e) {}
 
-  document.getElementById('clear-notes').addEventListener('click', () => {
-    notes.value = '';
-    try {
-      localStorage.removeItem(notesKey);
-    } catch (e) {}
-    notesState.textContent = 'Toutes les notes ont été supprimées.';
-  });
-})();
+document.getElementById("clearNotes").addEventListener("click", () => {
+  notes.value = "";
+  try { localStorage.removeItem("calculArretMatiereNotes"); } catch (e) {}
+});
+
+calculate();
 </script>
 </body>
 </html>
